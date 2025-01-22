@@ -18,13 +18,19 @@ def find_links(html):
     links = re.findall('https:\/\/[\w_-]+(?:(?:\.[\w_-]+)+)[\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]', html)
     return links
 
+def normalize_link(link):
+    normalized_link = link.replace("https://", "").replace("www.", "")
+    if normalized_link.endswith("/"):
+        normalized_link = normalized_link[:-1]
+    return normalized_link
+
 def thin_links(links, shopify_url):
-    common_paths = ["/collections/", "/products/", "/pages/", "/cart/", "/checkout/"]
-    url = shopify_url.replace("https://", "")
-    url = url.replace("www.", "")
+    common_paths = ["collections", "products", "pages", "cart", "checkout", "google", "instagram", "snapchat", "facebook", "youtube", "tiktok", "search", "cdn", "linkedin", "myshopify", "pinterest", "twitter", "apple", "blog"]
+    url = normalize_link(shopify_url)
     domains = url.split(".")[:-1]
-    thin_links = [shopify_url]
+    thin_links = [normalize_link(shopify_url)]
     for link in links:
+        link = normalize_link(link)
         if link in thin_links:
             continue
         for domain in domains:
@@ -56,10 +62,11 @@ def find_all_shopify_shops(shopify_url):
     html = get_html(shopify_url)
     links = find_links(html)
     links = thin_links(links, shopify_url)
+    # print(links)
     shops = get_all_shops(links)
     return shops
 
 if __name__ == "__main__":
-    shopify_url = "www.publicdesire.com"
+    shopify_url = "lucyandyak.com"
     shops = find_all_shopify_shops(shopify_url)
     print(shops)
