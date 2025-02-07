@@ -67,6 +67,6 @@ def find_all_shopify_shops(shopify_url):
     return shops
 
 if __name__ == "__main__":
-    shopify_url = "lucyandyak.com"
+    shopify_url = "www.publicdesire.com"
     shops = find_all_shopify_shops(shopify_url)
     print(shops)
