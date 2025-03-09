@@ -64,7 +64,7 @@ def get_all_shops(links):
         shop = get_shop(link)
         if shop:
             shops.add(shop)
-        if i == 5 and len(shops) <= 1:
+        if i >= 5 and len(shops) <= 1:
             return set()
         i += 1
     return shops

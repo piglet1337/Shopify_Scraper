@@ -22,22 +22,23 @@ def findShops_InsertIntoDF(x, bucket7, notBucket7, failed):
         row[i] = shop
         i += 1
     bucket7.append(row)
-    
 
-if __name__ == "__main__":
+def get_new_pd_dataframes(df):
     bucket7 = []
     notBucket7 = []
     failed = []
-
-    df = read_excel('domains_export.xlsx')
     df = extract_domain_column(df)
     df.apply(findShops_InsertIntoDF, args=[bucket7, notBucket7, failed])
     bucket7DF = pandas.DataFrame(bucket7)
     notBucket7DF = pandas.DataFrame(notBucket7)
     failedDF = pandas.DataFrame(failed)
-    print(bucket7DF)
-    print(notBucket7DF)
-    with pandas.ExcelWriter('myShopify.xlsx', engine='xlsxwriter') as writer:
-        bucket7DF.to_excel(writer, sheet_name='bucket7')
-        notBucket7DF.to_excel(writer, sheet_name='notBucket7')
-        failedDF.to_excel(writer, sheet_name='failed')
+    return (bucket7DF, notBucket7DF, failedDF)
+    
+if __name__ == "__main__":
+    input = "domains_export.xlsx"
+    df = read_excel(input)
+    dataframes = get_new_pd_dataframes(df)
+    with pandas.ExcelWriter("myShopify.xlsx", engine='xlsxwriter') as writer:
+            dataframes[0].to_excel(writer, sheet_name='bucket7')
+            dataframes[1].to_excel(writer, sheet_name='notBucket7')
+            dataframes[2].to_excel(writer, sheet_name='failed')
