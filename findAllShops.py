@@ -11,11 +11,6 @@ def get_html(shopify_url):
         req.add_header('Accept-Language', 'en-US,en;q=0.5')
         
         html_as_string = urllib.request.urlopen(req).read().decode('utf-8')
-        # fp = urllib.request.urlopen(shopify_url)
-        # mybytes = fp.read()
-
-        # html_as_string = mybytes.decode("utf8")
-        # fp.close()
     except Exception as e:
         print(e)
         return None

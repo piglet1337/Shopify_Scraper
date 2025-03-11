@@ -1,0 +1,4 @@
+Scrapes Shopify sites to find if they have multiple Shopify.Shop values for different regions  
+Usage:  
+Run app.py, upload excel sheet that has a column with Domains in the first Row  
+Wait for program to finish and a new xlsx file will be in the same location as the original
