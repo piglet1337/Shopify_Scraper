@@ -1,7 +1,11 @@
 import urllib.request
 import re
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_html(shopify_url):
+    print("getting html")
     if not shopify_url.startswith("https://"):
         shopify_url = "https://" + shopify_url
     try:
@@ -10,14 +14,14 @@ def get_html(shopify_url):
         req.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8')
         req.add_header('Accept-Language', 'en-US,en;q=0.5')
         
-        html_as_string = urllib.request.urlopen(req).read().decode('utf-8')
+        html_as_string = urllib.request.urlopen(req, timeout=3).read().decode('utf-8')
     except Exception as e:
         print(e)
         return None
     return html_as_string
 
 def find_links(html):
-    links = re.findall('https:\/\/[\w_-]+(?:(?:\.[\w_-]+)+)[\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]', html)
+    links = re.findall("https:\/\/[\w_-]+(?:(?:\.[\w_-]+)+)[\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-]", html)
     return links
 
 def normalize_link(link):
@@ -71,11 +75,12 @@ def find_all_shopify_shops(shopify_url):
         return set()
     links = find_links(html)
     links = thin_links(links, shopify_url)
+    print(links)
     shops = get_all_shops(links)
     print(shops)
     return shops
 
 if __name__ == "__main__":
-    shopify_url = "https://sendegaro.com/"
+    shopify_url = "www.allbirds.eu"
     shops = find_all_shopify_shops(shopify_url)
     print(shops)
